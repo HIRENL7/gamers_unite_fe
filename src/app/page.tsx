@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  CalendarDays,
-  Gamepad2,
-  Star,
-  Users,
-} from "lucide-react";
+import { preload } from "react-dom";
+import { ArrowRight, CalendarDays, Gamepad2, Star, Users } from "lucide-react";
 
 import { Container, Section } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
@@ -18,6 +13,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  HERO_DEPTH_MAP_SRC,
+  HERO_TEXTURE_MAP_SRC,
+} from "@/components/ui/hero-futuristic-assets";
 import HomeHeroFuturistic from "@/components/ui/home-hero-futuristic";
 
 export const metadata: Metadata = {
@@ -86,6 +85,16 @@ const topReviews = [
 ];
 
 export default function Home() {
+  preload(HERO_TEXTURE_MAP_SRC, {
+    as: "image",
+    crossOrigin: "anonymous",
+    fetchPriority: "high",
+  });
+  preload(HERO_DEPTH_MAP_SRC, {
+    as: "image",
+    crossOrigin: "anonymous",
+  });
+
   return (
     <div className="flex flex-1 flex-col">
       <HeroSection />
@@ -177,8 +186,6 @@ function HeroSection() {
   );
 }
 
-
-
 function FeaturedCafesSection() {
   return (
     <Section>
@@ -240,14 +247,14 @@ function PopularGamesSection() {
               size="sm"
             >
               <CardHeader>
-                <div className="mb-3 flex size-10 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                <div className="bg-primary text-primary-foreground mb-3 flex size-10 items-center justify-center rounded-md">
                   <Gamepad2 aria-hidden="true" className="size-5" />
                 </div>
                 <CardTitle>{game.title}</CardTitle>
                 <CardDescription>{game.genre}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">{game.players}</p>
+                <p className="text-muted-foreground text-sm">{game.players}</p>
               </CardContent>
             </Card>
           ))}
@@ -288,7 +295,9 @@ function TopReviewsSection() {
                   &ldquo;{review.quote}&rdquo;
                 </blockquote>
                 <p className="mt-5 font-medium">{review.author}</p>
-                <p className="text-sm text-muted-foreground">{review.context}</p>
+                <p className="text-muted-foreground text-sm">
+                  {review.context}
+                </p>
               </CardContent>
             </Card>
           ))}
@@ -308,7 +317,7 @@ function MembershipBanner() {
               <Users aria-hidden="true" className="size-4" />
               Membership
             </p>
-            <h2 className="mt-3 text-heading-3 font-semibold">
+            <h2 className="text-heading-3 mt-3 font-semibold">
               Join a community that knows where the good setups are.
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-300">
@@ -337,10 +346,10 @@ function CtaSection() {
             aria-hidden="true"
             className="mx-auto size-10 text-rose-500"
           />
-          <h2 className="mt-4 text-heading-2 font-semibold">
+          <h2 className="text-heading-2 mt-4 font-semibold">
             Ready for the next session?
           </h2>
-          <p className="mt-4 text-body text-muted-foreground">
+          <p className="text-body text-muted-foreground mt-4">
             Start with a cafe, a game, or a review. Gamers Unite keeps the path
             from plan to play short.
           </p>
@@ -377,9 +386,9 @@ function SectionHeader({
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div className="max-w-2xl">
-        <p className="text-sm font-medium text-muted-foreground">{eyebrow}</p>
-        <h2 className="mt-2 text-heading-2 font-semibold">{title}</h2>
-        <p className="mt-3 text-body text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground text-sm font-medium">{eyebrow}</p>
+        <h2 className="text-heading-2 mt-2 font-semibold">{title}</h2>
+        <p className="text-body text-muted-foreground mt-3">{description}</p>
       </div>
       <Link href={href} className={buttonVariants({ variant: "outline" })}>
         {action}

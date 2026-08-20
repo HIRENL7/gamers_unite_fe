@@ -5,8 +5,10 @@ import * as React from "react";
 
 import { Container, Section } from "@/components/layout";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CommentForm } from "@/features/reviews/components/comment-form";
 import { ReviewCard } from "@/features/reviews/components/review-card";
+import { ReviewCardSkeleton } from "@/features/reviews/components/review-card-skeleton";
 import { ReviewPagination } from "@/features/reviews/components/review-pagination";
 import { useReviews } from "@/features/reviews/hooks/use-reviews";
 
@@ -21,14 +23,14 @@ function ReviewsView() {
       <Section className="border-b bg-[linear-gradient(135deg,#f8fafc_0%,var(--background)_48%,#fff1f2_100%)] dark:bg-[linear-gradient(135deg,#111827_0%,var(--background)_48%,#3b0712_100%)]">
         <Container className="grid gap-5 py-10">
           <div className="max-w-3xl">
-            <p className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
+            <p className="text-muted-foreground inline-flex items-center gap-2 text-sm font-medium">
               <MessageSquareText aria-hidden="true" className="size-4" />
               Reviews
             </p>
-            <h1 className="mt-2 text-heading-1 font-semibold">
+            <h1 className="text-heading-1 mt-2 font-semibold">
               Read what players noticed after the match.
             </h1>
-            <p className="mt-4 text-body text-muted-foreground">
+            <p className="text-body text-muted-foreground mt-4">
               Browse mock player reviews with accessible ratings, animated
               cards, local validation, and paginated review history.
             </p>
@@ -40,14 +42,31 @@ function ReviewsView() {
         <Container>
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_24rem]">
             <div className="grid gap-4">
-              {reviewsQuery.isLoading ? <ReviewsLoadingSkeleton /> : null}
+              {reviewsQuery.isLoading ? (
+                <>
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <ReviewCardSkeleton key={index} />
+                  ))}
+                  <div
+                    className="bg-card flex flex-col gap-3 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between"
+                    aria-label="Loading reviews"
+                  >
+                    <Skeleton className="h-5 w-52" />
+                    <div className="flex items-center gap-2">
+                      <Skeleton className="size-8 rounded-lg" />
+                      <Skeleton className="h-8 min-w-24 rounded-md" />
+                      <Skeleton className="size-8 rounded-lg" />
+                    </div>
+                  </div>
+                </>
+              ) : null}
 
               {reviewsQuery.isError ? (
-                <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6">
+                <div className="border-destructive/30 bg-destructive/5 rounded-lg border p-6">
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <h2 className="font-semibold">Reviews unavailable</h2>
-                      <p className="mt-1 text-sm text-muted-foreground">
+                      <p className="text-muted-foreground mt-1 text-sm">
                         {reviewsQuery.error.message}
                       </p>
                     </div>
@@ -91,29 +110,6 @@ function ReviewsView() {
           </div>
         </Container>
       </Section>
-    </div>
-  );
-}
-
-function ReviewsLoadingSkeleton() {
-  return (
-    <div className="grid gap-4" aria-label="Loading reviews">
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div
-          key={index}
-          className="rounded-lg border bg-card p-4"
-          aria-hidden="true"
-        >
-          <div className="flex gap-3">
-            <div className="size-11 animate-pulse rounded-md bg-muted" />
-            <div className="flex-1 space-y-3">
-              <div className="h-5 w-2/3 animate-pulse rounded bg-muted" />
-              <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
-              <div className="h-20 animate-pulse rounded bg-muted" />
-            </div>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }

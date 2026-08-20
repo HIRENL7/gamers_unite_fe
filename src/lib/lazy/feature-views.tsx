@@ -1,13 +1,16 @@
 import dynamic from "next/dynamic";
 
-import { CafeLoadingSkeleton } from "@/features/cafes/components/cafe-loading-skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
+import { CafesViewSkeleton } from "@/features/cafes/components/cafes-view-skeleton";
+import { ReviewsViewSkeleton } from "@/features/reviews/components/reviews-view-skeleton";
+import { SearchViewSkeleton } from "@/features/search/components/search-view-skeleton";
 
 const CafesView = dynamic(
   () =>
     import("@/features/cafes/components/cafes-view").then((module) => ({
       default: module.CafesView,
     })),
-  { loading: () => <CafeLoadingSkeleton /> }
+  { loading: () => <CafesViewSkeleton /> },
 );
 
 const SearchView = dynamic(
@@ -15,7 +18,7 @@ const SearchView = dynamic(
     import("@/features/search/components/search-view").then((module) => ({
       default: module.SearchView,
     })),
-  { loading: () => <SearchViewSkeleton /> }
+  { loading: () => <SearchViewSkeleton /> },
 );
 
 const ReviewsView = dynamic(
@@ -23,7 +26,7 @@ const ReviewsView = dynamic(
     import("@/features/reviews/components/reviews-view").then((module) => ({
       default: module.ReviewsView,
     })),
-  { loading: () => <ReviewsViewSkeleton /> }
+  { loading: () => <ReviewsViewSkeleton /> },
 );
 
 const LoginForm = dynamic(
@@ -31,7 +34,7 @@ const LoginForm = dynamic(
     import("@/features/auth/components/login-form").then((module) => ({
       default: module.LoginForm,
     })),
-  { loading: () => <AuthFormSkeleton /> }
+  { loading: () => <AuthFormSkeleton /> },
 );
 
 const RegisterForm = dynamic(
@@ -39,15 +42,17 @@ const RegisterForm = dynamic(
     import("@/features/auth/components/register-form").then((module) => ({
       default: module.RegisterForm,
     })),
-  { loading: () => <AuthFormSkeleton /> }
+  { loading: () => <AuthFormSkeleton /> },
 );
 
 const ForgotPasswordForm = dynamic(
   () =>
-    import("@/features/auth/components/forgot-password-form").then((module) => ({
-      default: module.ForgotPasswordForm,
-    })),
-  { loading: () => <AuthFormSkeleton /> }
+    import("@/features/auth/components/forgot-password-form").then(
+      (module) => ({
+        default: module.ForgotPasswordForm,
+      }),
+    ),
+  { loading: () => <AuthFormSkeleton /> },
 );
 
 const ResetPasswordForm = dynamic(
@@ -55,7 +60,7 @@ const ResetPasswordForm = dynamic(
     import("@/features/auth/components/reset-password-form").then((module) => ({
       default: module.ResetPasswordForm,
     })),
-  { loading: () => <AuthFormSkeleton /> }
+  { loading: () => <AuthFormSkeleton /> },
 );
 
 const OtpVerificationForm = dynamic(
@@ -63,46 +68,27 @@ const OtpVerificationForm = dynamic(
     import("@/features/auth/components/otp-verification-form").then(
       (module) => ({
         default: module.OtpVerificationForm,
-      })
+      }),
     ),
-  { loading: () => <AuthFormSkeleton /> }
+  { loading: () => <AuthFormSkeleton /> },
 );
-
-function SearchViewSkeleton() {
-  return (
-    <div className="grid gap-4" aria-label="Loading search">
-      <div className="h-12 max-w-3xl animate-pulse rounded-lg bg-muted" />
-      <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <div className="h-72 animate-pulse rounded-lg bg-muted" />
-        <div className="grid gap-4">
-          <div className="h-16 animate-pulse rounded-lg bg-muted" />
-          <div className="h-40 animate-pulse rounded-lg bg-muted" />
-          <div className="h-40 animate-pulse rounded-lg bg-muted" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ReviewsViewSkeleton() {
-  return (
-    <div className="grid gap-4" aria-label="Loading reviews">
-      <div className="h-10 w-64 animate-pulse rounded bg-muted" />
-      <div className="grid gap-4 md:grid-cols-2">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="h-48 animate-pulse rounded-lg bg-muted" />
-        ))}
-      </div>
-    </div>
-  );
-}
 
 function AuthFormSkeleton() {
   return (
     <div className="grid gap-4" aria-label="Loading form">
-      <div className="h-10 animate-pulse rounded bg-muted" />
-      <div className="h-10 animate-pulse rounded bg-muted" />
-      <div className="h-10 animate-pulse rounded bg-muted" />
+      <div className="grid gap-2">
+        <Skeleton className="h-5 w-12" />
+        <Skeleton className="h-10 w-full rounded-md" />
+      </div>
+      <div className="grid gap-2">
+        <Skeleton className="h-5 w-16" />
+        <Skeleton className="h-10 w-full rounded-md" />
+      </div>
+      <div className="grid gap-2">
+        <Skeleton className="h-5 w-20" />
+        <Skeleton className="h-10 w-full rounded-md" />
+      </div>
+      <Skeleton className="h-8 w-full rounded-lg" />
     </div>
   );
 }

@@ -1,12 +1,5 @@
-import { Container, Section } from "@/components/layout";
-import { CafeLoadingSkeleton } from "@/features/cafes/components/cafe-loading-skeleton";
+import { CafesViewSkeleton } from "@/features/cafes/components/cafes-view-skeleton";
 
 export default function CafesLoading() {
-  return (
-    <Section>
-      <Container aria-label="Loading cafes">
-        <CafeLoadingSkeleton />
-      </Container>
-    </Section>
-  );
+  return <CafesViewSkeleton />;
 }

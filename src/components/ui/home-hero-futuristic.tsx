@@ -1,24 +1,9 @@
-"use client"
-
-import dynamic from "next/dynamic"
-
-const HeroFuturistic = dynamic(
-  () => import("@/components/ui/hero-futuristic"),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        className="h-svh w-full bg-black"
-        aria-label="Loading hero experience"
-      />
-    ),
-  }
-)
+import HeroFuturistic from "@/components/ui/hero-futuristic";
 
 interface HomeHeroFuturisticProps {
-  title?: string
-  subtitle?: string
-  className?: string
+  title?: string;
+  subtitle?: string;
+  className?: string;
 }
 
 export default function HomeHeroFuturistic({
@@ -28,5 +13,5 @@ export default function HomeHeroFuturistic({
 }: HomeHeroFuturisticProps) {
   return (
     <HeroFuturistic title={title} subtitle={subtitle} className={className} />
-  )
+  );
 }

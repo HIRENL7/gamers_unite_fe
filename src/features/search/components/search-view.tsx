@@ -7,6 +7,7 @@ import * as React from "react";
 import { Container, Section } from "@/components/layout";
 import { SearchBar } from "@/features/search/components/search-bar";
 import { SearchFilters } from "@/features/search/components/search-filters";
+import { SearchResultCardSkeleton } from "@/features/search/components/search-result-card-skeleton";
 import { SearchResultsList } from "@/features/search/components/search-results-list";
 import { SearchSorting } from "@/features/search/components/search-sorting";
 import { useDebouncedValue } from "@/features/search/hooks/use-debounced-value";
@@ -22,7 +23,7 @@ function SearchView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [filters, setFilters] = React.useState<SearchFiltersState>(() =>
-    searchFiltersFromParams(searchParams)
+    searchFiltersFromParams(searchParams),
   );
   const debouncedTerm = useDebouncedValue(filters.term, 350);
   const debouncedLocation = useDebouncedValue(filters.location, 350);
@@ -39,7 +40,7 @@ function SearchView() {
       filters.minRating,
       filters.sort,
       filters.type,
-    ]
+    ],
   );
   const searchQuery = useSearchResults(queryFilters);
   const results = React.useMemo(
@@ -76,13 +77,11 @@ function SearchView() {
       <Section className="border-b bg-[linear-gradient(135deg,#f8fafc_0%,var(--background)_48%,#fef3c7_100%)] dark:bg-[linear-gradient(135deg,#111827_0%,var(--background)_48%,#451a03_100%)]">
         <Container className="grid gap-6 py-10">
           <div className="max-w-3xl">
-            <p className="text-sm font-medium text-muted-foreground">
-              Search
-            </p>
-            <h1 className="mt-2 text-heading-1 font-semibold">
+            <p className="text-muted-foreground text-sm font-medium">Search</p>
+            <h1 className="text-heading-1 mt-2 font-semibold">
               Search cafes, games, and reviews.
             </h1>
-            <p className="mt-4 text-body text-muted-foreground">
+            <p className="text-body text-muted-foreground mt-4">
               Use debounced search, filters, sorting, and infinite loading
               against mock data wired through TanStack Query.
             </p>
@@ -103,35 +102,44 @@ function SearchView() {
             <div className="grid gap-4">
               <SearchSorting filters={filters} onChange={setFilters} />
 
-              <div className="flex flex-col gap-2 rounded-lg border bg-card p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="bg-card flex flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-medium">Results</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {searchQuery.isLoading
                       ? "Searching..."
                       : `${totalItems} result${totalItems === 1 ? "" : "s"}`}
                   </p>
                 </div>
                 {searchQuery.isFetching && !searchQuery.isFetchingNextPage ? (
-                  <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-                    <Loader2 aria-hidden="true" className="size-4 animate-spin" />
+                  <span className="text-muted-foreground inline-flex items-center gap-2 text-sm">
+                    <Loader2
+                      aria-hidden="true"
+                      className="size-4 animate-spin"
+                    />
                     Updating
                   </span>
                 ) : null}
               </div>
 
-              {searchQuery.isLoading ? <SearchLoadingSkeleton /> : null}
+              {searchQuery.isLoading ? (
+                <div className="grid gap-4" aria-label="Loading search results">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <SearchResultCardSkeleton key={index} />
+                  ))}
+                </div>
+              ) : null}
 
               {searchQuery.isError ? (
-                <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6">
+                <div className="border-destructive/30 bg-destructive/5 rounded-lg border p-6">
                   <div className="flex items-start gap-3">
                     <Search
                       aria-hidden="true"
-                      className="mt-0.5 size-5 text-destructive"
+                      className="text-destructive mt-0.5 size-5"
                     />
                     <div>
                       <h2 className="font-semibold">Search unavailable</h2>
-                      <p className="mt-1 text-sm text-muted-foreground">
+                      <p className="text-muted-foreground mt-1 text-sm">
                         {searchQuery.error.message}
                       </p>
                     </div>
@@ -151,25 +159,6 @@ function SearchView() {
           </div>
         </Container>
       </Section>
-    </div>
-  );
-}
-
-function SearchLoadingSkeleton() {
-  return (
-    <div className="grid gap-4" aria-hidden="true">
-      {Array.from({ length: 3 }).map((_, index) => (
-        <div key={index} className="rounded-lg border bg-card p-4">
-          <div className="flex gap-3">
-            <div className="size-10 animate-pulse rounded-md bg-muted" />
-            <div className="flex-1 space-y-3">
-              <div className="h-5 w-2/3 animate-pulse rounded bg-muted" />
-              <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
-              <div className="h-16 animate-pulse rounded bg-muted" />
-            </div>
-          </div>
-        </div>
-      ))}
     </div>
   );
 }

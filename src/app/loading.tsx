@@ -1,61 +1,53 @@
 import { Container, Section } from "@/components/layout";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { HeroFuturisticSkeleton } from "@/components/ui/hero-futuristic-skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
     <div className="flex flex-1 flex-col" aria-label="Loading home page">
+      <Section spacing="none" className="overflow-hidden border-b p-0">
+        <HeroFuturisticSkeleton />
+      </Section>
+
       <Section>
-        <Container className="grid gap-10 lg:grid-cols-[1fr_0.9fr]">
-          <div className="space-y-5">
-            <Skeleton className="h-8 w-52 rounded-full" />
-            <Skeleton className="h-16 w-full max-w-3xl rounded-lg" />
-            <Skeleton className="h-20 w-full max-w-2xl rounded-lg" />
-            <div className="flex gap-3">
-              <Skeleton className="h-10 w-32 rounded-lg" />
-              <Skeleton className="h-10 w-32 rounded-lg" />
+        <Container>
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-2xl space-y-3">
+              <Skeleton className="h-5 w-28" />
+              <Skeleton className="h-10 w-full max-w-xl" />
+              <Skeleton className="h-6 w-full max-w-2xl" />
             </div>
-          </div>
-          <Skeleton className="min-h-80 rounded-lg" />
-        </Container>
-      </Section>
-
-      <Section spacing="sm" className="bg-muted/30">
-        <Container>
-          <Skeleton className="h-28 rounded-lg" />
-        </Container>
-      </Section>
-
-      <Section>
-        <Container>
-          <div className="space-y-3">
-            <Skeleton className="h-4 w-32 rounded" />
-            <Skeleton className="h-10 w-full max-w-xl rounded" />
-            <Skeleton className="h-6 w-full max-w-2xl rounded" />
+            <Skeleton className="h-8 w-32 rounded-lg" />
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {Array.from({ length: 3 }).map((_, index) => (
               <Card key={index} className="rounded-lg">
+                <Skeleton className="h-2 w-full rounded-none" />
                 <CardHeader>
-                  <Skeleton className="h-6 w-3/4 rounded" />
-                  <Skeleton className="h-4 w-1/2 rounded" />
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-1/2" />
                 </CardHeader>
                 <CardContent>
-                  <Skeleton className="h-20 rounded" />
+                  <div className="grid gap-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-5/6" />
+                  </div>
                 </CardContent>
+                <CardFooter className="justify-between">
+                  <Skeleton className="h-5 w-10" />
+                  <Skeleton className="h-7 w-16 rounded-lg" />
+                </CardFooter>
               </Card>
             ))}
           </div>
         </Container>
       </Section>
     </div>
-  );
-}
-
-function Skeleton({ className }: { className?: string }) {
-  return (
-    <div
-      className={`animate-pulse bg-muted ${className ?? ""}`}
-      aria-hidden="true"
-    />
   );
 }

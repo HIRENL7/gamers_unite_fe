@@ -5,6 +5,7 @@ import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import { SearchResultCard } from "@/features/search/components/search-result-card";
+import { SearchResultCardSkeleton } from "@/features/search/components/search-result-card-skeleton";
 import type { SearchResult } from "@/features/search/types/search";
 
 type SearchResultsListProps = {
@@ -48,7 +49,7 @@ function SearchResultsList({
     return (
       <div className="rounded-lg border border-dashed p-8 text-center">
         <p className="font-medium">No results found</p>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-sm">
           Try a broader search, another type, or a lower rating filter.
         </p>
       </div>
@@ -62,6 +63,13 @@ function SearchResultsList({
       ))}
 
       <div ref={sentinelRef} className="h-1" aria-hidden="true" />
+
+      {isFetchingNextPage ? (
+        <>
+          <SearchResultCardSkeleton />
+          <SearchResultCardSkeleton />
+        </>
+      ) : null}
 
       {hasNextPage ? (
         <Button
@@ -77,7 +85,7 @@ function SearchResultsList({
           Load more
         </Button>
       ) : (
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-center text-sm">
           End of results
         </p>
       )}
