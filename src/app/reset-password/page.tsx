@@ -4,11 +4,14 @@ import { Suspense } from "react";
 
 import { AuthShell } from "@/features/auth/components/auth-shell";
 import { ResetPasswordForm } from "@/lib/lazy/feature-views";
+import { createMetadata } from "@/lib/seo/create-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Reset Password",
-  description: "Reset your GameSunite account password.",
-};
+  description: "Set a new password for your Gamers Unite account.",
+  path: "/reset-password",
+  noIndex: true,
+});
 
 export default function ResetPasswordPage() {
   return (

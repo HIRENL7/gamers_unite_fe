@@ -19,20 +19,16 @@ import {
   HERO_TEXTURE_MAP_SRC,
 } from "@/components/ui/hero-futuristic-assets";
 import HomeHeroFuturistic from "@/components/ui/home-hero-futuristic";
+import { createMetadata } from "@/lib/seo/create-metadata";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Find Gaming Cafes, Games, and Reviews",
+export const metadata: Metadata = createMetadata({
+  title: "Find Gaming Cafes Near You | Gamers Unite",
   description:
-    "Discover gaming cafes, browse popular games, read trusted community reviews, and find your next place to play.",
-  openGraph: {
-    title: "Gamers Unite",
-    description:
-      "Find gaming cafes, popular games, and community reviews in one place.",
-    siteName: "Gamers Unite",
-    type: "website",
-  },
-};
+    "Discover gaming cafes, compare setups and prices, browse popular games, and read trusted player reviews on Gamers Unite.",
+  path: "/",
+  absoluteTitle: true,
+});
 
 const featuredCafes = [
   {

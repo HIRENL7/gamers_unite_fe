@@ -1,5 +1,6 @@
 import { Container, Section } from "@/components/layout";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SearchHeading } from "@/features/search/components/search-heading";
 import { SearchResultCardSkeleton } from "@/features/search/components/search-result-card-skeleton";
 
 function SearchViewSkeleton() {
@@ -7,12 +8,7 @@ function SearchViewSkeleton() {
     <div className="flex flex-1 flex-col" aria-label="Loading search">
       <Section className="border-b bg-[linear-gradient(135deg,#f8fafc_0%,var(--background)_48%,#fef3c7_100%)] dark:bg-[linear-gradient(135deg,#111827_0%,var(--background)_48%,#451a03_100%)]">
         <Container className="grid gap-6 py-10">
-          <div className="max-w-3xl">
-            <Skeleton className="h-5 w-16" />
-            <Skeleton className="mt-2 h-10 w-full max-w-xl sm:h-12 lg:h-14" />
-            <Skeleton className="mt-4 h-6 w-full max-w-2xl" />
-            <Skeleton className="mt-2 h-6 w-3/4 max-w-xl" />
-          </div>
+          <SearchHeading />
           <div className="grid gap-2">
             <Skeleton className="h-5 w-14" />
             <Skeleton className="h-12 w-full rounded-lg" />

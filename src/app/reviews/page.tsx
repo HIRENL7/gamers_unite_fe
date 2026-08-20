@@ -2,15 +2,26 @@ import type { Metadata } from "next";
 
 import { ReviewsView } from "@/lib/lazy/feature-views";
 import { createMetadata } from "@/lib/seo/create-metadata";
+import { JsonLd, createBreadcrumbJsonLd } from "@/lib/seo/json-ld";
 
 export const metadata: Metadata = createMetadata({
-  title: "Reviews",
+  title: "Player Reviews",
   description:
-    "Read mock player reviews and submit a locally validated mock review.",
+    "Read player reviews of gaming cafes, including setup quality, crowd, and session experience.",
   path: "/reviews",
   keywords: ["player reviews", "gaming cafe reviews"],
 });
 
 export default function ReviewsPage() {
-  return <ReviewsView />;
+  return (
+    <>
+      <JsonLd
+        data={createBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Reviews", path: "/reviews" },
+        ])}
+      />
+      <ReviewsView />
+    </>
+  );
 }

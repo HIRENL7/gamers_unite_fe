@@ -7,7 +7,6 @@ import { createMetadata } from "@/lib/seo/create-metadata";
 export const metadata = createMetadata({
   title: "Page Not Found",
   description: "The page you are looking for does not exist on Gamers Unite.",
-  path: "/404",
   noIndex: true,
 });
 

@@ -3,11 +3,14 @@ import Link from "next/link";
 
 import { AuthShell } from "@/features/auth/components/auth-shell";
 import { RegisterForm } from "@/lib/lazy/feature-views";
+import { createMetadata } from "@/lib/seo/create-metadata";
 
-export const metadata: Metadata = {
-  title: "Register",
-  description: "Create a mock Gamers Unite account with local validation.",
-};
+export const metadata: Metadata = createMetadata({
+  title: "Create Account",
+  description: "Create a Gamers Unite account to join the player community.",
+  path: "/register",
+  noIndex: true,
+});
 
 export default function RegisterPage() {
   return (

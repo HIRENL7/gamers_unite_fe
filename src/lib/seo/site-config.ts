@@ -17,7 +17,6 @@ export const siteConfig = {
     "console gaming",
   ],
   url: env.siteUrl,
-  twitterHandle: "@gamersunite",
 } as const;
 
 export const publicRoutes = [
@@ -27,4 +26,15 @@ export const publicRoutes = [
   { path: "/reviews", changeFrequency: "daily", priority: 0.8 },
   { path: "/games", changeFrequency: "weekly", priority: 0.7 },
   { path: "/membership", changeFrequency: "monthly", priority: 0.6 },
+] as const;
+
+export const disallowedRobotPaths = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/otp-verification",
+  "/profile",
+  "/favorites",
+  "/api/",
 ] as const;

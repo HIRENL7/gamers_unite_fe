@@ -71,7 +71,7 @@ export function HeroFuturistic({
       <div aria-hidden="true" className="hero-glow" />
 
       <div className="pointer-events-none absolute z-60 flex h-svh w-full flex-col items-center justify-center px-10 uppercase">
-        <div className="text-3xl font-extrabold md:text-5xl xl:text-6xl 2xl:text-7xl">
+        <h1 className="text-3xl font-extrabold md:text-5xl xl:text-6xl 2xl:text-7xl">
           <div className="flex space-x-2 overflow-hidden text-white lg:space-x-6">
             {titleWords.map((word, index) => (
               <div
@@ -86,7 +86,7 @@ export function HeroFuturistic({
               </div>
             ))}
           </div>
-        </div>
+        </h1>
         <div className="mt-2 overflow-hidden text-xs font-bold text-white md:text-xl xl:text-2xl 2xl:text-3xl">
           <div
             className={subtitleVisible ? "fade-in-subtitle" : undefined}

@@ -1,14 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Gamepad2 } from "lucide-react";
 
 import { Container, Section } from "@/components/layout";
 import { buttonVariants } from "@/components/ui/button";
 import { createMetadata } from "@/lib/seo/create-metadata";
+import { JsonLd, createBreadcrumbJsonLd } from "@/lib/seo/json-ld";
 
-export const metadata = createMetadata({
-  title: "Games",
+export const metadata: Metadata = createMetadata({
+  title: "Games Catalog",
   description:
-    "Browse popular games played at gaming cafes. Game catalog coming soon to Gamers Unite.",
+    "Browse popular games played at gaming cafes. A full games catalog is coming soon on Gamers Unite.",
   path: "/games",
   keywords: ["popular games", "esports titles", "console games"],
 });
@@ -16,6 +18,12 @@ export const metadata = createMetadata({
 export default function GamesPage() {
   return (
     <Section>
+      <JsonLd
+        data={createBreadcrumbJsonLd([
+          { name: "Home", path: "/" },
+          { name: "Games", path: "/games" },
+        ])}
+      />
       <Container className="grid max-w-2xl gap-6 py-16">
         <div className="inline-flex size-12 items-center justify-center rounded-lg bg-primary/10 text-primary">
           <Gamepad2 aria-hidden="true" className="size-6" />

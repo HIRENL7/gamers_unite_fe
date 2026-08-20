@@ -3,11 +3,14 @@ import Link from "next/link";
 
 import { AuthShell } from "@/features/auth/components/auth-shell";
 import { LoginForm } from "@/lib/lazy/feature-views";
+import { createMetadata } from "@/lib/seo/create-metadata";
 
-export const metadata: Metadata = {
-  title: "Login",
-  description: "Log in to Gamers Unite with a mock authentication form.",
-};
+export const metadata: Metadata = createMetadata({
+  title: "Log In",
+  description: "Log in to your Gamers Unite account.",
+  path: "/login",
+  noIndex: true,
+});
 
 export default function LoginPage() {
   return (

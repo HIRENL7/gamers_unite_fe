@@ -2,7 +2,7 @@ import Link from "next/link";
 import type * as React from "react";
 
 import { Container, Section } from "@/components/layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 type AuthShellProps = {
   children: React.ReactNode;
@@ -24,7 +24,9 @@ function AuthShell({ children, description, footer, title }: AuthShellProps) {
           </Link>
           <Card className="animate-enter rounded-lg">
             <CardHeader>
-              <CardTitle className="text-2xl">{title}</CardTitle>
+              <h1 className="font-heading text-2xl leading-snug font-medium">
+                {title}
+              </h1>
               <p className="text-sm leading-6 text-muted-foreground">
                 {description}
               </p>

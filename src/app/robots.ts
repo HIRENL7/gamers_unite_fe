@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { siteConfig } from "@/lib/seo/site-config";
+import { disallowedRobotPaths, siteConfig } from "@/lib/seo/site-config";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -8,15 +8,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: [
-          "/login",
-          "/register",
-          "/forgot-password",
-          "/reset-password",
-          "/otp-verification",
-        ],
+        disallow: [...disallowedRobotPaths],
       },
     ],
     sitemap: `${siteConfig.url}/sitemap.xml`,
+    host: new URL(siteConfig.url).host,
   };
 }

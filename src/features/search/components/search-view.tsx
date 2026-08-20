@@ -7,6 +7,7 @@ import * as React from "react";
 import { Container, Section } from "@/components/layout";
 import { SearchBar } from "@/features/search/components/search-bar";
 import { SearchFilters } from "@/features/search/components/search-filters";
+import { SearchHeading } from "@/features/search/components/search-heading";
 import { SearchResultCardSkeleton } from "@/features/search/components/search-result-card-skeleton";
 import { SearchResultsList } from "@/features/search/components/search-results-list";
 import { SearchSorting } from "@/features/search/components/search-sorting";
@@ -86,16 +87,7 @@ function SearchView() {
     <div className="flex flex-1 flex-col">
       <Section className="border-b bg-[linear-gradient(135deg,#f8fafc_0%,var(--background)_48%,#fef3c7_100%)] dark:bg-[linear-gradient(135deg,#111827_0%,var(--background)_48%,#451a03_100%)]">
         <Container className="grid gap-6 py-10">
-          <div className="max-w-3xl">
-            <p className="text-muted-foreground text-sm font-medium">Search</p>
-            <h1 className="text-heading-1 mt-2 font-semibold">
-              Search cafes, games, and reviews.
-            </h1>
-            <p className="text-body text-muted-foreground mt-4">
-              Use debounced search, filters, sorting, and infinite loading
-              against mock data wired through TanStack Query.
-            </p>
-          </div>
+          <SearchHeading />
 
           <SearchBar
             value={filters.term}

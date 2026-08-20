@@ -3,11 +3,14 @@ import Link from "next/link";
 
 import { AuthShell } from "@/features/auth/components/auth-shell";
 import { ForgotPasswordForm } from "@/lib/lazy/feature-views";
+import { createMetadata } from "@/lib/seo/create-metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createMetadata({
   title: "Forgot Password",
-  description: "Request a mock password reset link.",
-};
+  description: "Request a password reset link for your Gamers Unite account.",
+  path: "/forgot-password",
+  noIndex: true,
+});
 
 export default function ForgotPasswordPage() {
   return (

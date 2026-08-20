@@ -27,7 +27,6 @@ export const metadata: Metadata = {
   ...createMetadata({
     title: siteConfig.name,
     description: siteConfig.description,
-    path: "/",
   }),
   metadataBase: new URL(siteConfig.url),
   title: {
