@@ -18,6 +18,8 @@ import {
   searchFiltersToParams,
 } from "@/features/search/utils/search-utils";
 
+const RESULT_SKELETON_COUNT = 5;
+
 function SearchView() {
   const router = useRouter();
   const pathname = usePathname();
@@ -51,6 +53,14 @@ function SearchView() {
     [searchQuery.data?.pages],
   );
   const totalItems = searchQuery.data?.pages[0]?.totalItems ?? 0;
+  // Typing has not reached the query layer yet, so the visible results are
+  // already stale and must not be presented as the answer to the new input.
+  const isDebouncePending =
+    filters.term !== debouncedTerm || filters.location !== debouncedLocation;
+  const isSearching =
+    isDebouncePending ||
+    searchQuery.isPending ||
+    (searchQuery.isFetching && !searchQuery.isFetchingNextPage);
 
   React.useEffect(() => {
     const params = searchFiltersToParams(queryFilters);
@@ -96,22 +106,27 @@ function SearchView() {
 
       <Section>
         <Container>
-          <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-            <SearchFilters filters={filters} onChange={setFilters} />
+          <div className="grid items-start gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+            <aside
+              aria-label="Search filters"
+              className="lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto lg:overscroll-contain"
+            >
+              <SearchFilters filters={filters} onChange={setFilters} />
+            </aside>
 
-            <div className="grid gap-4">
+            <div className="grid content-start gap-4">
               <SearchSorting filters={filters} onChange={setFilters} />
 
               <div className="bg-card flex flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="font-medium">Results</p>
                   <p className="text-muted-foreground text-sm">
-                    {searchQuery.isLoading
+                    {isSearching
                       ? "Searching..."
                       : `${totalItems} result${totalItems === 1 ? "" : "s"}`}
                   </p>
                 </div>
-                {searchQuery.isFetching && !searchQuery.isFetchingNextPage ? (
+                {isSearching ? (
                   <span className="text-muted-foreground inline-flex items-center gap-2 text-sm">
                     <Loader2
                       aria-hidden="true"
@@ -122,15 +137,22 @@ function SearchView() {
                 ) : null}
               </div>
 
-              {searchQuery.isLoading ? (
-                <div className="grid gap-4" aria-label="Loading search results">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <SearchResultCardSkeleton key={index} />
-                  ))}
+              {isSearching ? (
+                <div
+                  className="grid gap-4"
+                  role="status"
+                  aria-busy="true"
+                  aria-label="Loading search results"
+                >
+                  {Array.from({ length: RESULT_SKELETON_COUNT }).map(
+                    (_, index) => (
+                      <SearchResultCardSkeleton key={index} />
+                    ),
+                  )}
                 </div>
               ) : null}
 
-              {searchQuery.isError ? (
+              {searchQuery.isError && !isSearching ? (
                 <div className="border-destructive/30 bg-destructive/5 rounded-lg border p-6">
                   <div className="flex items-start gap-3">
                     <Search
@@ -147,7 +169,7 @@ function SearchView() {
                 </div>
               ) : null}
 
-              {searchQuery.data ? (
+              {searchQuery.data && !isSearching ? (
                 <SearchResultsList
                   results={results}
                   hasNextPage={Boolean(searchQuery.hasNextPage)}

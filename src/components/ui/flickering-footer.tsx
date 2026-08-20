@@ -141,9 +141,9 @@ function FlickeringFooter({
         </nav>
       </div>
 
-      <div className="relative z-0 mt-16 h-48 w-full md:mt-24 md:h-64">
+      <div className="relative z-0 mt-3 h-48 w-full m md:h-64">
         <div className="absolute inset-0 z-10 bg-gradient-to-t from-transparent from-40% to-background" />
-        <div className="absolute inset-0 mx-6">
+        <div className="absolute inset-0 ">
           <FlickeringGrid
             text={isCompact ? compactGridText : gridText}
             fontSize={isCompact ? 70 : 90}

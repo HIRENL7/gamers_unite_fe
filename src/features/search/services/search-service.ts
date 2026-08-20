@@ -7,12 +7,14 @@ import { apiClient } from "@/services/api/client";
 
 export async function searchMockResults(
   request: SearchRequest,
+  signal?: AbortSignal,
 ): Promise<SearchResponse> {
   const response = await apiClient.get<unknown>("/search", {
     params: {
       ...request,
       minRating: request.minRating ?? "",
     },
+    signal,
   });
 
   return parseSearchResponse(response);

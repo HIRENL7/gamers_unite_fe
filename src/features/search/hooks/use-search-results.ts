@@ -15,12 +15,15 @@ function serializeSearchFilters(filters: SearchFilters) {
 export function useSearchResults(filters: SearchFilters) {
   return useInfiniteQuery({
     queryKey: queryKeys.search.infinite(serializeSearchFilters(filters)),
-    queryFn: ({ pageParam }) =>
-      searchMockResults({
-        ...filters,
-        page: Number(pageParam),
-        pageSize: PAGE_SIZE,
-      }),
+    queryFn: ({ pageParam, signal }) =>
+      searchMockResults(
+        {
+          ...filters,
+          page: Number(pageParam),
+          pageSize: PAGE_SIZE,
+        },
+        signal,
+      ),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.page < lastPage.totalPages ? lastPage.page + 1 : undefined,
