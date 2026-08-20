@@ -1,8 +1,10 @@
-import Link from "next/link";
 import * as React from "react";
 
-import { Container } from "@/components/layout/container";
-import { cn } from "@/lib/utils";
+import {
+  FlickeringFooter,
+  type FlickeringFooterColumn,
+} from "@/components/ui/flickering-footer";
+import { siteConfig } from "@/lib/seo/site-config";
 
 type FooterLink = {
   label: string;
@@ -13,39 +15,30 @@ type FooterProps = React.ComponentProps<"footer"> & {
   links?: FooterLink[];
 };
 
-const defaultLinks: FooterLink[] = [
-  { label: "Cafes", href: "/cafes" },
-  { label: "Games", href: "/games" },
-  { label: "Reviews", href: "/reviews" },
-  { label: "Search", href: "/search" },
-];
+function toFooterColumns(links: FooterLink[]): FlickeringFooterColumn[] {
+  return [
+    {
+      title: "Explore",
+      links: links.map((link) => ({
+        id: link.href,
+        title: link.label,
+        url: link.href,
+      })),
+    },
+  ];
+}
 
-function Footer({ links = defaultLinks, className, ...props }: FooterProps) {
+function Footer({ links, className, ...props }: FooterProps) {
   return (
-    <footer
-      data-slot="footer"
-      className={cn("border-t bg-background/95", className)}
+    <FlickeringFooter
+      brand={siteConfig.name}
+      description={siteConfig.description}
+      columns={links ? toFooterColumns(links) : undefined}
+      gridText={siteConfig.tagline}
+      compactGridText={siteConfig.name}
+      className={className}
       {...props}
-    >
-      <Container className="flex flex-col gap-4 py-8 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-        <div>
-          <p className="font-medium text-foreground">Gamers Unite</p>
-          <p className="mt-1 text-xs">Find places to play, gather, and review.</p>
-        </div>
-
-        <nav className="flex flex-wrap gap-x-4 gap-y-2" aria-label="Footer">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-sm outline-none transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-      </Container>
-    </footer>
+    />
   );
 }
 
