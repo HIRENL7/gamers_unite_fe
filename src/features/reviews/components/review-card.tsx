@@ -19,7 +19,7 @@ type ReviewCardProps = {
 function ReviewCard({ review, index = 0 }: ReviewCardProps) {
   return (
     <Card
-      className="animate-enter rounded-lg"
+      className="card-interactive animate-enter rounded-lg"
       style={{ animationDelay: `${Math.min(index * 45, 180)}ms` }}
     >
       <CardHeader>

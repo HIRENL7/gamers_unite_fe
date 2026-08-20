@@ -25,6 +25,11 @@ interface HeroFuturisticProps {
   subtitle?: string;
 }
 
+/** Entrance cascade: each title word, then the subtitle, then the search form. */
+const WORD_REVEAL_INTERVAL_MS = 170;
+const SUBTITLE_REVEAL_DELAY_MS = 260;
+const SEARCH_FORM_DELAY = "1.05s";
+
 export function HeroFuturistic({
   className,
   title = "Build Your Dreams",
@@ -48,11 +53,14 @@ export function HeroFuturistic({
     if (visibleWords < titleWords.length) {
       const timeout = setTimeout(() => {
         setVisibleWords((current) => current + 1);
-      }, 600);
+      }, WORD_REVEAL_INTERVAL_MS);
       return () => clearTimeout(timeout);
     }
 
-    const timeout = setTimeout(() => setSubtitleVisible(true), 800);
+    const timeout = setTimeout(
+      () => setSubtitleVisible(true),
+      SUBTITLE_REVEAL_DELAY_MS,
+    );
     return () => clearTimeout(timeout);
   }, [visibleWords, titleWords.length]);
 
@@ -60,6 +68,8 @@ export function HeroFuturistic({
     <div
       className={cn("hero-futuristic-root relative h-svh bg-black", className)}
     >
+      <div aria-hidden="true" className="hero-glow" />
+
       <div className="pointer-events-none absolute z-60 flex h-svh w-full flex-col items-center justify-center px-10 uppercase">
         <div className="text-3xl font-extrabold md:text-5xl xl:text-6xl 2xl:text-7xl">
           <div className="flex space-x-2 overflow-hidden text-white lg:space-x-6">
@@ -81,7 +91,7 @@ export function HeroFuturistic({
           <div
             className={subtitleVisible ? "fade-in-subtitle" : undefined}
             style={{
-              animationDelay: `${titleWords.length * 0.13 + 0.2 + subtitleDelay}s`,
+              animationDelay: `${0.12 + subtitleDelay}s`,
               opacity: subtitleVisible ? undefined : 0,
             }}
           >
@@ -94,7 +104,7 @@ export function HeroFuturistic({
         action="/search"
         role="search"
         className="hero-search-form animate-enter bg-background grid w-[min(56rem,calc(100%-2rem))] gap-3 rounded-lg border p-3 shadow-sm md:grid-cols-[1fr_1fr_auto]"
-        style={{ animationDelay: "2.2s" }}
+        style={{ animationDelay: SEARCH_FORM_DELAY }}
       >
         <label className="grid gap-1">
           <span className="text-sm font-medium">Search cafes or games</span>
@@ -126,7 +136,7 @@ export function HeroFuturistic({
             />
           </span>
         </label>
-        <Button className="self-end" size="lg" type="submit">
+        <Button className="cta-lift self-end" size="lg" type="submit">
           Search
         </Button>
       </form>

@@ -37,6 +37,21 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Brand accent: derived from the amber already used for ratings and hero gradients. */
+  --brand: oklch(0.769 0.163 70);
+  --brand-strong: oklch(0.82 0.16 78);
+  --brand-text: oklch(0.52 0.13 58);
+  --brand-surface: color-mix(in oklab, var(--brand) 12%, transparent);
+  --brand-ring: color-mix(in oklab, var(--brand) 34%, transparent);
+  --brand-glow: color-mix(in oklab, var(--brand) 22%, transparent);
+
+  /* Motion system */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-reveal: 620ms;
+  --duration-hover: 240ms;
+  --reveal-distance: 1.75rem;
+  --reveal-stagger: 70ms;
 }
 
 @theme inline {
@@ -58,6 +73,9 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-ink: var(--brand-text);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
   --radius-sm: calc(var(--radius) - 4px);
@@ -133,6 +151,21 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --brand: oklch(0.8 0.15 72);
+  --brand-strong: oklch(0.86 0.14 80);
+  --brand-text: oklch(0.86 0.13 82);
+  --brand-surface: color-mix(in oklab, var(--brand) 16%, transparent);
+  --brand-ring: color-mix(in oklab, var(--brand) 40%, transparent);
+  --brand-glow: color-mix(in oklab, var(--brand) 26%, transparent);
+}
+
+/* Shorter travel and tighter stagger on phones keeps scrolling calm. */
+@media (max-width: 40rem) {
+  :root {
+    --reveal-distance: 1rem;
+    --reveal-stagger: 50ms;
+  }
 }
 
 @layer base {
@@ -183,6 +216,162 @@
       animation: none;
     }
   }
+
+  /*
+   * Scroll reveal system.
+   * The hidden start state is scoped to `scripting: enabled` so content stays
+   * visible when JavaScript never runs and the observer can never reveal it.
+   */
+  @media (scripting: enabled) {
+    [data-reveal],
+    [data-reveal-group] > * {
+      opacity: 0;
+      animation-duration: var(--duration-reveal);
+      animation-timing-function: var(--ease-premium);
+      animation-delay: var(--reveal-delay, 0ms);
+      animation-fill-mode: both;
+      animation-play-state: paused;
+    }
+
+    [data-reveal="fade-up"],
+    [data-reveal-group] > * {
+      animation-name: reveal-fade-up;
+    }
+
+    [data-reveal="fade"] {
+      animation-name: reveal-fade;
+    }
+
+    [data-reveal="scale-in"] {
+      animation-name: reveal-scale-in;
+    }
+
+    [data-reveal][data-revealed="true"],
+    [data-reveal-group][data-revealed="true"] > * {
+      animation-play-state: running;
+    }
+
+    [data-reveal-group] > *:nth-child(2) {
+      --reveal-delay: var(--reveal-stagger);
+    }
+
+    [data-reveal-group] > *:nth-child(3) {
+      --reveal-delay: calc(var(--reveal-stagger) * 2);
+    }
+
+    [data-reveal-group] > *:nth-child(4) {
+      --reveal-delay: calc(var(--reveal-stagger) * 3);
+    }
+
+    [data-reveal-group] > *:nth-child(5) {
+      --reveal-delay: calc(var(--reveal-stagger) * 4);
+    }
+
+    [data-reveal-group] > *:nth-child(n + 6) {
+      --reveal-delay: calc(var(--reveal-stagger) * 5);
+    }
+  }
+
+  /*
+   * Cards lift with the `translate` property, never `transform`: a revealed card
+   * keeps a filled animation on `transform` that would otherwise win on hover.
+   */
+  .card-interactive {
+    transition-property: translate, box-shadow;
+    transition-duration: var(--duration-hover);
+    transition-timing-function: var(--ease-premium);
+  }
+
+  .card-interactive .card-media {
+    transition: transform 420ms var(--ease-premium);
+  }
+
+  @media (hover: hover) {
+    .card-interactive:hover {
+      translate: 0 -3px;
+      box-shadow:
+        0 0 0 1px var(--brand-ring),
+        0 18px 40px -28px var(--brand-glow);
+    }
+
+    .card-interactive:hover .card-media {
+      transform: scale(1.03);
+    }
+  }
+
+  .card-interactive:focus-within {
+    box-shadow:
+      0 0 0 1px var(--brand-ring),
+      0 18px 40px -28px var(--brand-glow);
+  }
+
+  /* Primary calls to action only, so ordinary buttons keep their current feel. */
+  .cta-lift {
+    transition-property: transform, box-shadow, background-color, border-color;
+    transition-duration: var(--duration-hover);
+    transition-timing-function: var(--ease-premium);
+  }
+
+  .cta-lift svg {
+    transition: transform var(--duration-hover) var(--ease-premium);
+  }
+
+  @media (hover: hover) {
+    .cta-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -16px var(--brand-glow);
+    }
+
+    .cta-lift:hover svg {
+      transform: translateX(2px);
+    }
+  }
+
+  .cta-lift:active {
+    transform: translateY(0);
+  }
+
+  /* Static radial wash: no filters or extra layers, so it costs nothing to paint. */
+  .section-atmosphere {
+    background-image: radial-gradient(
+      60% 60% at 50% 0%,
+      var(--brand-surface) 0%,
+      transparent 70%
+    );
+  }
+
+  .navbar-enter {
+    animation: navbar-enter 520ms var(--ease-premium) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    [data-reveal][data-revealed="true"],
+    [data-reveal-group] > *,
+    [data-reveal-group][data-revealed="true"] > *,
+    .navbar-enter {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .card-interactive,
+    .card-interactive .card-media,
+    .cta-lift,
+    .cta-lift svg {
+      transition: none;
+    }
+
+    .card-interactive:hover {
+      translate: none;
+    }
+
+    .cta-lift:hover,
+    .card-interactive:hover .card-media,
+    .cta-lift:hover svg {
+      transform: none;
+    }
+  }
 }
 
 @keyframes enter {
@@ -216,5 +405,55 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes reveal-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--reveal-distance), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes reveal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translate3d(0, calc(var(--reveal-distance) * 0.5), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+/*
+ * Tailwind v4 centers the navbar with the `translate` property, so this keyframe
+ * only touches `transform` and the two compose instead of fighting.
+ */
+@keyframes navbar-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -0.75rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }

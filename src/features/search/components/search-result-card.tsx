@@ -29,7 +29,7 @@ function SearchResultCard({ result }: SearchResultCardProps) {
   const Icon = resultIcons[result.type];
 
   return (
-    <Card className="rounded-lg">
+    <Card className="card-interactive rounded-lg">
       <CardHeader>
         <div className="flex items-start gap-3">
           <span

@@ -26,6 +26,16 @@
   }
 }
 
+@keyframes hero-futuristic-glow-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes hero-futuristic-search-in {
   0% {
     opacity: 0;
@@ -57,10 +67,31 @@
   animation: hero-futuristic-search-in 0.8s ease forwards;
 }
 
+/*
+ * Depth pass over the WebGPU canvas: two static gradients, no blur filter, so it
+ * costs one extra composited layer and nothing per frame.
+ */
+.hero-futuristic-root .hero-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  opacity: 0;
+  background-image:
+    radial-gradient(
+      70% 45% at 50% 100%,
+      var(--brand-glow, transparent) 0%,
+      transparent 72%
+    ),
+    radial-gradient(120% 90% at 50% 50%, transparent 55%, oklch(0 0 0 / 55%) 100%);
+  animation: hero-futuristic-glow-in 1.2s ease 0.25s forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-futuristic-root .fade-in,
   .hero-futuristic-root .fade-in-subtitle,
-  .hero-futuristic-root .hero-search-form {
+  .hero-futuristic-root .hero-search-form,
+  .hero-futuristic-root .hero-glow {
     animation: none;
     opacity: 1;
     filter: none;

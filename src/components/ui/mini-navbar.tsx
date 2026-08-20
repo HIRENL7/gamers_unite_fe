@@ -112,7 +112,7 @@ export function MiniNavbar({
       <header
         data-slot="navbar"
         className={cn(
-          "fixed top-6 left-1/2 z-40 flex w-[calc(100%-2rem)] -translate-x-1/2 flex-col items-center border border-[#333] bg-[#1f1f1f57] py-3 pl-6 pr-6 backdrop-blur-sm transition-[border-radius] duration-0 ease-in-out sm:w-auto",
+          "navbar-enter fixed top-6 left-1/2 z-40 flex w-[calc(100%-2rem)] -translate-x-1/2 flex-col items-center border border-[#333] bg-[#1f1f1f57] py-3 pl-6 pr-6 backdrop-blur-sm transition-[border-radius] duration-0 ease-in-out sm:w-auto",
           headerShapeClass,
           className
         )}

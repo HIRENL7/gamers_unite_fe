@@ -44,13 +44,13 @@ function CafeCard({ cafe, isSelected = false, onSelect }: CafeCardProps) {
       onClick={handleSelect}
       onKeyDown={handleKeyDown}
       className={cn(
-        "cursor-pointer rounded-lg transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "card-interactive cursor-pointer rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         isSelected && "ring-2 ring-primary"
       )}
     >
       <div
         className={cn(
-          "relative h-32 overflow-hidden bg-gradient-to-br",
+          "card-media relative h-32 overflow-hidden bg-gradient-to-br",
           cafe.heroTone
         )}
       >

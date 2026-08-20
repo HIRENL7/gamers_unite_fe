@@ -4,6 +4,7 @@ import { preload } from "react-dom";
 import { ArrowRight, CalendarDays, Gamepad2, Star, Users } from "lucide-react";
 
 import { Container, Section } from "@/components/layout";
+import { Reveal, RevealGroup } from "@/components/motion";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -18,6 +19,7 @@ import {
   HERO_TEXTURE_MAP_SRC,
 } from "@/components/ui/hero-futuristic-assets";
 import HomeHeroFuturistic from "@/components/ui/home-hero-futuristic";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Find Gaming Cafes, Games, and Reviews",
@@ -190,16 +192,18 @@ function FeaturedCafesSection() {
   return (
     <Section>
       <Container>
-        <SectionHeader
-          eyebrow="Featured cafes"
-          title="Places built for better sessions"
-          description="Scan reliable cafe picks with the details players check first."
-          href="/cafes"
-          action="View all cafes"
-        />
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <Reveal>
+          <SectionHeader
+            eyebrow="Featured cafes"
+            title="Places built for better sessions"
+            description="Scan reliable cafe picks with the details players check first."
+            href="/cafes"
+            action="View all cafes"
+          />
+        </Reveal>
+        <RevealGroup className="mt-8 grid gap-4 md:grid-cols-3">
           {featuredCafes.map((cafe) => (
-            <Card key={cafe.name} className="animate-fade-in rounded-lg">
+            <Card key={cafe.name} className="card-interactive rounded-lg">
               <div className={`${cafe.accent} h-2`} />
               <CardHeader>
                 <CardTitle>{cafe.name}</CardTitle>
@@ -222,7 +226,7 @@ function FeaturedCafesSection() {
               </CardFooter>
             </Card>
           ))}
-        </div>
+        </RevealGroup>
       </Container>
     </Section>
   );
@@ -230,20 +234,22 @@ function FeaturedCafesSection() {
 
 function PopularGamesSection() {
   return (
-    <Section className="bg-muted/30">
+    <Section className="section-atmosphere bg-muted/30">
       <Container>
-        <SectionHeader
-          eyebrow="Popular games"
-          title="What players are queueing up"
-          description="Track the games shaping cafe nights, tournaments, and pickup sessions."
-          href="/games"
-          action="Browse games"
-        />
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Reveal>
+          <SectionHeader
+            eyebrow="Popular games"
+            title="What players are queueing up"
+            description="Track the games shaping cafe nights, tournaments, and pickup sessions."
+            href="/games"
+            action="Browse games"
+          />
+        </Reveal>
+        <RevealGroup className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {popularGames.map((game) => (
             <Card
               key={game.title}
-              className="animate-fade-in rounded-lg"
+              className="card-interactive rounded-lg"
               size="sm"
             >
               <CardHeader>
@@ -258,7 +264,7 @@ function PopularGamesSection() {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </RevealGroup>
       </Container>
     </Section>
   );
@@ -268,16 +274,18 @@ function TopReviewsSection() {
   return (
     <Section>
       <Container>
-        <SectionHeader
-          eyebrow="Top reviews"
-          title="Real notes from real sessions"
-          description="Community reviews surface setup quality, staff helpfulness, food, and crowd fit."
-          href="/reviews"
-          action="Read reviews"
-        />
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+        <Reveal>
+          <SectionHeader
+            eyebrow="Top reviews"
+            title="Real notes from real sessions"
+            description="Community reviews surface setup quality, staff helpfulness, food, and crowd fit."
+            href="/reviews"
+            action="Read reviews"
+          />
+        </Reveal>
+        <RevealGroup className="mt-8 grid gap-4 lg:grid-cols-3">
           {topReviews.map((review) => (
-            <Card key={review.author} className="animate-fade-in rounded-lg">
+            <Card key={review.author} className="card-interactive rounded-lg">
               <CardContent className="pt-(--card-spacing)">
                 <div
                   className="flex gap-1 text-amber-500"
@@ -301,7 +309,7 @@ function TopReviewsSection() {
               </CardContent>
             </Card>
           ))}
-        </div>
+        </RevealGroup>
       </Container>
     </Section>
   );
@@ -311,7 +319,10 @@ function MembershipBanner() {
   return (
     <Section spacing="sm">
       <Container>
-        <div className="animate-enter grid gap-6 rounded-lg border bg-zinc-950 p-6 text-zinc-50 shadow-sm md:grid-cols-[1fr_auto] md:items-center md:p-8 dark:bg-zinc-900">
+        <Reveal
+          variant="scale-in"
+          className="section-atmosphere grid gap-6 rounded-lg border bg-zinc-950 p-6 text-zinc-50 shadow-sm md:grid-cols-[1fr_auto] md:items-center md:p-8 dark:bg-zinc-900"
+        >
           <div>
             <p className="inline-flex items-center gap-2 text-sm font-medium text-emerald-300">
               <Users aria-hidden="true" className="size-4" />
@@ -327,11 +338,14 @@ function MembershipBanner() {
           </div>
           <Link
             href="/membership"
-            className={buttonVariants({ variant: "secondary", size: "lg" })}
+            className={cn(
+              buttonVariants({ variant: "secondary", size: "lg" }),
+              "cta-lift",
+            )}
           >
             Become a member
           </Link>
-        </div>
+        </Reveal>
       </Container>
     </Section>
   );
@@ -339,9 +353,9 @@ function MembershipBanner() {
 
 function CtaSection() {
   return (
-    <Section>
+    <Section className="section-atmosphere">
       <Container className="text-center">
-        <div className="mx-auto max-w-2xl">
+        <Reveal className="mx-auto max-w-2xl">
           <CalendarDays
             aria-hidden="true"
             className="mx-auto size-10 text-rose-500"
@@ -354,17 +368,23 @@ function CtaSection() {
             from plan to play short.
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link href="/search" className={buttonVariants({ size: "lg" })}>
+            <Link
+              href="/search"
+              className={cn(buttonVariants({ size: "lg" }), "cta-lift")}
+            >
               Start searching
             </Link>
             <Link
               href="/reviews"
-              className={buttonVariants({ variant: "outline", size: "lg" })}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "cta-lift",
+              )}
             >
               See top reviews
             </Link>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </Section>
   );
@@ -386,11 +406,14 @@ function SectionHeader({
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
       <div className="max-w-2xl">
-        <p className="text-muted-foreground text-sm font-medium">{eyebrow}</p>
+        <p className="text-brand-ink text-sm font-medium">{eyebrow}</p>
         <h2 className="text-heading-2 mt-2 font-semibold">{title}</h2>
         <p className="text-body text-muted-foreground mt-3">{description}</p>
       </div>
-      <Link href={href} className={buttonVariants({ variant: "outline" })}>
+      <Link
+        href={href}
+        className={cn(buttonVariants({ variant: "outline" }), "cta-lift")}
+      >
         {action}
         <ArrowRight aria-hidden="true" />
       </Link>
