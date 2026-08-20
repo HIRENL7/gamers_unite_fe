@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -28,7 +28,7 @@ function AnimatedNavLink({
       onClick={onNavigate}
       className="group relative inline-block h-5 overflow-hidden text-sm leading-5 whitespace-nowrap"
     >
-      <div className="flex flex-col transition-transform duration-[400ms] ease-out transform group-hover:-translate-y-1/2">
+      <div className="flex flex-col transition-transform duration-400ms ease-out transform group-hover:-translate-y-1/2">
         <span className="block h-5 leading-5 text-gray-300">{children}</span>
         <span className="block h-5 leading-5 text-white">{children}</span>
       </div>
@@ -71,34 +71,32 @@ export function MiniNavbar({
   ...props
 }: MiniNavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [headerShapeClass, setHeaderShapeClass] = useState("rounded-full")
-  const shapeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [isShapeExpanded, setIsShapeExpanded] = useState(false)
 
   const navLinks = [...items, action]
 
   const closeMenu = () => setIsOpen(false)
 
-  const toggleMenu = () => setIsOpen((open) => !open)
+  const openMenu = () => {
+    setIsOpen(true)
+    setIsShapeExpanded(true)
+  }
 
+  const toggleMenu = () => (isOpen ? closeMenu() : openMenu())
+
+  // Corners stay expanded until the panel has finished collapsing.
   useEffect(() => {
-    if (shapeTimeoutRef.current) {
-      clearTimeout(shapeTimeoutRef.current)
+    if (isOpen || !isShapeExpanded) {
+      return
     }
 
-    if (isOpen) {
-      setHeaderShapeClass("rounded-xl")
-    } else {
-      shapeTimeoutRef.current = setTimeout(() => {
-        setHeaderShapeClass("rounded-full")
-      }, 300)
-    }
+    const timeout = setTimeout(() => setIsShapeExpanded(false), 300)
 
-    return () => {
-      if (shapeTimeoutRef.current) {
-        clearTimeout(shapeTimeoutRef.current)
-      }
-    }
-  }, [isOpen])
+    return () => clearTimeout(timeout)
+  }, [isOpen, isShapeExpanded])
+
+  const headerShapeClass =
+    isOpen || isShapeExpanded ? "rounded-xl" : "rounded-full"
 
   return (
     <>

@@ -19,15 +19,9 @@ function CafesView() {
   const [page, setPage] = React.useState(1);
   const [selectedCafeId, setSelectedCafeId] = React.useState<string>();
   const cafesQuery = useCafes({ page, pageSize: PAGE_SIZE });
-  const selectedCafeQuery = useCafe(selectedCafeId);
-
-  React.useEffect(() => {
-    const firstCafe = cafesQuery.data?.cafes[0];
-
-    if (!selectedCafeId && firstCafe) {
-      setSelectedCafeId(firstCafe.id);
-    }
-  }, [cafesQuery.data?.cafes, selectedCafeId]);
+  // Defaults to the first cafe on the page until one is explicitly picked.
+  const activeCafeId = selectedCafeId ?? cafesQuery.data?.cafes[0]?.id;
+  const selectedCafeQuery = useCafe(activeCafeId);
 
   function handleSelectCafe(cafe: Cafe) {
     setSelectedCafeId(cafe.id);
@@ -81,7 +75,7 @@ function CafesView() {
               <div className="grid gap-4">
                 <CafeGrid
                   cafes={cafesQuery.data.cafes}
-                  selectedCafeId={selectedCafeId}
+                  selectedCafeId={activeCafeId}
                   onSelectCafe={handleSelectCafe}
                 />
                 <CafePagination

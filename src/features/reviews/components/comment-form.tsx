@@ -41,18 +41,26 @@ function CommentForm() {
   const [errors, setErrors] = React.useState<ReviewFormErrors>({});
   const [status, setStatus] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  // A null override means the field still mirrors the signed-in user.
+  const [authorNameOverride, setAuthorNameOverride] = React.useState<
+    string | null
+  >(null);
 
-  React.useEffect(() => {
-    if (user?.name) {
-      setValues((current) => ({ ...current, authorName: user.name }));
-    }
-  }, [user?.name]);
+  const formValues: ReviewFormValues = {
+    ...values,
+    authorName: authorNameOverride ?? user?.name ?? "",
+  };
 
   function updateField<TKey extends keyof ReviewFormValues>(
     key: TKey,
     value: ReviewFormValues[TKey],
   ) {
-    setValues((current) => ({ ...current, [key]: value }));
+    if (key === "authorName") {
+      setAuthorNameOverride(String(value));
+    } else {
+      setValues((current) => ({ ...current, [key]: value }));
+    }
+
     setErrors((current) => ({ ...current, [key]: undefined }));
     setStatus(null);
   }
@@ -65,7 +73,7 @@ function CommentForm() {
       return;
     }
 
-    const validation = validateReviewForm(values);
+    const validation = validateReviewForm(formValues);
 
     if (!validation.isValid) {
       setErrors(validation.errors);
@@ -77,13 +85,11 @@ function CommentForm() {
     setErrors({});
 
     try {
-      await createReview(values);
+      await createReview(formValues);
       await queryClient.invalidateQueries({ queryKey: queryKeys.reviews.lists() });
-      setStatus(`Review published for ${values.cafeName.trim()}.`);
-      setValues({
-        ...initialFormValues,
-        authorName: user?.name ?? "",
-      });
+      setStatus(`Review published for ${formValues.cafeName.trim()}.`);
+      setValues(initialFormValues);
+      setAuthorNameOverride(null);
     } catch (error) {
       const message =
         error instanceof ApiError
@@ -116,7 +122,7 @@ function CommentForm() {
               id="review-cafe"
               label="Cafe"
               placeholder="Hyperfrag Arena"
-              value={values.cafeName}
+              value={formValues.cafeName}
               error={errors.cafeName}
               onChange={(value) => updateField("cafeName", value)}
             />
@@ -124,7 +130,7 @@ function CommentForm() {
               id="review-game"
               label="Game"
               placeholder="Valorant"
-              value={values.gameTitle}
+              value={formValues.gameTitle}
               error={errors.gameTitle}
               onChange={(value) => updateField("gameTitle", value)}
             />
@@ -134,13 +140,13 @@ function CommentForm() {
             id="review-author"
             label="Your name"
             placeholder="Player name"
-            value={values.authorName}
+            value={formValues.authorName}
             error={errors.authorName}
             onChange={(value) => updateField("authorName", value)}
           />
 
           <Rating
-            value={values.rating}
+            value={formValues.rating}
             label="Your rating"
             error={errors.rating}
             onChange={(rating) => updateField("rating", rating)}
@@ -150,7 +156,7 @@ function CommentForm() {
             id="review-title"
             label="Title"
             placeholder="Summarise your visit"
-            value={values.title}
+            value={formValues.title}
             error={errors.title}
             onChange={(value) => updateField("title", value)}
           />
@@ -161,7 +167,7 @@ function CommentForm() {
             </label>
             <Textarea
               id="review-comment"
-              value={values.comment}
+              value={formValues.comment}
               aria-invalid={Boolean(errors.comment)}
               aria-describedby={
                 errors.comment ? "review-comment-error" : undefined
